@@ -14,11 +14,38 @@ window.addEventListener('resize', () => {
 })
 controls = new THREE.OrbitControls( camera, renderer.domElement);
 
-let geometry = new THREE.BoxGeometry(1, 1, 1);
-let material = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true});
+let geometry = new THREE.BoxGeometry(3, 3, 3);
+
+let cubeMaterials = [
+    new THREE.MeshLambertMaterial( {map: new THREE.TextureLoader().load('./img/textures/skycube/1.jpg'), side: THREE.DoubleSide} ),
+    new THREE.MeshPhongMaterial( {map: new THREE.TextureLoader().load('./img/textures/skycube/2.jpg'), side: THREE.DoubleSide} ),
+    new THREE.MeshLambertMaterial( {map: new THREE.TextureLoader().load('./img/textures/skycube/3.jpg'), side: THREE.DoubleSide} ),
+    new THREE.MeshPhongMaterial( {map: new THREE.TextureLoader().load('./img/textures/skycube/4.jpg'), side: THREE.DoubleSide} ),
+    new THREE.MeshLambertMaterial( {map: new THREE.TextureLoader().load('./img/textures/skycube/5.jpg'), side: THREE.DoubleSide} ),
+    new THREE.MeshLambertMaterial( {map: new THREE.TextureLoader().load('./img/textures/skycube/6.jpg'), side: THREE.DoubleSide} ),
+]
+
+let material = new THREE.MeshFaceMaterial( cubeMaterials );
 let cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 camera.position.z = 5;
+
+let ambientLight = new THREE.AmbientLight( 0xffffff, 1.2);
+scene.add(ambientLight);
+
+let spotLight = new THREE.SpotLight( 0x00ff00, 0.8);
+spotLight.position.set( 9, 7, 0);
+
+
+let slgeometry = new THREE.SphereGeometry(0.5, 20, 20);
+let slmaterial = new THREE.MeshPhongMaterial( {color: 0x00ff00,})
+let spotLightMark = new THREE.Mesh( slgeometry, slmaterial);
+spotLightMark.position.set( 2, 9, 0);
+
+scene.add(spotLight);
+scene.add(spotLightMark);
+
+
 
 //game logic
 let update = function() {
