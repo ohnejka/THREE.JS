@@ -5,6 +5,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
 
+let axesHelper = new THREE.AxesHelper( 5 );
+scene.add( axesHelper );
+
 window.addEventListener('resize', () => {
     let width = window.innerWidth;
     let height = window.innerHeight;
@@ -13,6 +16,8 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
 })
 controls = new THREE.OrbitControls( camera, renderer.domElement);
+
+
 
 let geometry = new THREE.BoxGeometry(3, 3, 3);
 
@@ -33,28 +38,34 @@ camera.position.z = 5;
 let ambientLight = new THREE.AmbientLight( 0xffffff, 1.2);
 scene.add(ambientLight);
 
-let spotLight = new THREE.SpotLight( 0x00ff00, 0.8);
-spotLight.position.set( 9, 7, 0);
+let pointLight = new THREE.PointLight( 0xff0000, 4, 0, 2);
 
 
-let slgeometry = new THREE.SphereGeometry(0.5, 20, 20);
-let slmaterial = new THREE.MeshPhongMaterial( {color: 0x00ff00,})
-let spotLightMark = new THREE.Mesh( slgeometry, slmaterial);
-spotLightMark.position.set( 2, 9, 0);
 
-scene.add(spotLight);
-scene.add(spotLightMark);
+
+let plHelper = new THREE.PointLightHelper (pointLight, 0.5);
+
+scene.add(pointLight);
+scene.add(plHelper);
 
 
 
 //game logic
 let update = function() {
+
+    let time = Date.now() * 0.0005;
+
+    pointLight.position.x = Math.sin(time * 0.7) * 5;
+    pointLight.position.y = Math.cos (time * 0.4) * 7;
+    pointLight.position.z = Math.sin(time * 0.5) * 4;
+
     //cube.rotation.x += 0.005;
     //cube.rotation.y += 0.005;
 };
 
 //draw image
 let render = function() {
+    controls.update();
     renderer.render(scene, camera);
 }
 
